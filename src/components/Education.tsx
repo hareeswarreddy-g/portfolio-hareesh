@@ -35,54 +35,50 @@ export default function Education() {
                     </h2>
 
                     <div className="max-w-3xl mx-auto relative">
-                        {/* Timeline Line */}
-                        <div className="absolute left-0 md:left-1/2 ml-[21px] md:ml-[-1px] h-full w-[2px] bg-gradient-to-b from-[var(--neon-blue)] to-[var(--neon-purple)] opacity-30"></div>
+                        {/* 1. Timeline Line - Adjusted ml to center behind the 20px dot */}
+                        <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-gradient-to-b from-[var(--neon-blue)] to-transparent ml-[9px] opacity-30"></div>
 
                         {educationDetails.map((edu, index) => (
-                            <div key={index} className="relative flex flex-col md:flex-row gap-8 mb-12 last:mb-0">
-                                {/* Timeline Dot */}
-                                <div className="absolute left-0 md:left-1/2 ml-[12px] md:ml-[-10px] w-5 h-5 rounded-full bg-[var(--background)] border-4 border-[var(--neon-blue)] z-10"></div>
+                            <div key={index} className="relative pl-10 md:pl-12 mb-12 last:mb-0">
+                                
+                                {/* 2. Timeline Dot - Fixed at left-0, 20px wide (w-5) */}
+                                <div className="absolute left-0 top-1 w-5 h-5 rounded-full bg-black border-4 border-[var(--neon-blue)] z-10 shadow-[0_0_10px_rgba(0,210,255,0.5)]"></div>
 
-                                {/* Content - Left side on desktop (for variation, simpler for single item to keep right or centered) */}
-                                <div className="ml-12 md:ml-auto md:w-[45%] md:pr-12 md:text-right">
-                                    {/* For a single item, keeping it simple. If multiple, we flip sides. */}
-                                </div>
-
-                                {/* Right Side Content for First Item (or full width adapted) */}
-                                {/* Actually, let's make it a simple card on the right for the first item */}
-                                <div className="ml-12 md:ml-8 md:w-[100%]">
-                                    <motion.div
-                                        whileHover={{ scale: 1.02 }}
-                                        className="p-6 rounded-2xl glass border-l-4 border-l-[var(--neon-blue)]"
-                                    >
-                                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-                                            <div>
-                                                <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                                                    <GraduationCap className="text-[var(--neon-blue)]" /> {edu.institution}
-                                                </h3>
-                                                <p className="text-[var(--neon-cyan)]">{edu.degree}</p>
-                                            </div>
-                                            <div className="flex items-center gap-2 text-sm text-gray-400 bg-white/5 px-3 py-1 rounded-full w-fit">
-                                                <Calendar size={14} /> {edu.year}
-                                            </div>
-                                        </div>
-
-                                        <p className="text-gray-300 mb-4">{edu.description}</p>
-
+                                {/* 3. Card Content */}
+                                <motion.div
+                                    whileHover={{ scale: 1.01 }}
+                                    className="p-6 rounded-2xl glass border-l-4 border-l-[var(--neon-blue)] bg-white/5 backdrop-blur-sm"
+                                >
+                                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
                                         <div>
-                                            <h4 className="text-sm font-semibold text-gray-400 mb-3 flex items-center gap-2">
-                                                <BookOpen size={14} /> Relevant Coursework:
-                                            </h4>
-                                            <div className="flex flex-wrap gap-2 text-sm">
-                                                {edu.subjects.map((sub) => (
-                                                    <span key={sub} className="px-3 py-1 rounded-full bg-[var(--neon-purple)]/10 text-[var(--neon-purple)] border border-[var(--neon-purple)]/20">
-                                                        {sub}
-                                                    </span>
-                                                ))}
-                                            </div>
+                                            <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                                                <GraduationCap className="text-[var(--neon-blue)]" /> {edu.institution}
+                                            </h3>
+                                            <p className="text-[var(--neon-cyan)] font-medium mt-1">{edu.degree}</p>
                                         </div>
-                                    </motion.div>
-                                </div>
+                                        <div className="flex items-center gap-2 text-sm text-gray-400 bg-white/5 px-3 py-1 rounded-full w-fit h-fit border border-white/10">
+                                            <Calendar size={14} /> {edu.year}
+                                        </div>
+                                    </div>
+
+                                    <p className="text-gray-300 mb-6 leading-relaxed">{edu.description}</p>
+
+                                    <div>
+                                        <h4 className="text-sm font-semibold text-gray-400 mb-4 flex items-center gap-2">
+                                            <BookOpen size={14} /> Relevant Coursework:
+                                        </h4>
+                                        <div className="flex flex-wrap gap-2">
+                                            {edu.subjects.map((sub) => (
+                                                <span 
+                                                    key={sub} 
+                                                    className="px-3 py-1 rounded-full bg-[var(--neon-purple)]/10 text-[var(--neon-purple)] border border-[var(--neon-purple)]/20 text-xs font-medium hover:bg-[var(--neon-purple)]/20 transition-colors"
+                                                >
+                                                    {sub}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </motion.div>
                             </div>
                         ))}
                     </div>
