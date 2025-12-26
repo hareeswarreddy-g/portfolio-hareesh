@@ -7,43 +7,42 @@ import { ArrowRight, Terminal } from "lucide-react";
 
 export default function Hero() {
     return (
-        /* PC: 'flex-row' with 'items-center' (Your original look)
-           Mobile: 'flex-col' to stack elements vertically
-        */
         <section className="relative min-h-screen flex flex-col md:flex-row items-center overflow-hidden bg-[var(--background)]">
             
-            {/* Background Gradient Layer */}
+            {/* Background Elements */}
             <div className="absolute inset-0 w-full h-full bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-gray-900 via-black to-black opacity-50 z-0"></div>
 
-            {/* PROFILE IMAGE CONTAINER 
-                Mobile: Positioned relatively at the top with 45% screen height
-                PC: Positioned absolutely on the right half (Original)
-            */}
-            <div className="relative w-full h-[45vh] md:absolute md:top-0 md:right-0 md:w-1/2 md:h-full z-10 pointer-events-none select-none">
+            {/* --- 1. MOBILE ONLY IMAGE (Shows at the Top) --- */}
+            <div className="relative w-full h-[40vh] z-10 md:hidden">
                 <div className="relative w-full h-full">
-                    {/* PC Gradient: Blends left-to-right (Original) */}
-                    <div className="absolute inset-0 bg-gradient-to-l from-transparent via-[var(--background)] to-[var(--background)] z-20 hidden md:block"></div>
-                    
-                    {/* Mobile Gradient: Blends top-to-bottom so the name below is readable */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--background)] z-20 md:hidden"></div>
-                    
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[var(--background)] z-20"></div>
                     <Image
                         src="/profile.jpg"
-                        alt="Profile Background"
+                        alt="Profile Mobile"
                         fill
+                        className="object-cover object-top"
                         priority
-                        className="object-cover object-top md:object-right-top"
                     />
                 </div>
             </div>
 
-            {/* TEXT CONTENT CONTAINER
-                Mobile: Sits below the image due to 'flex-col'
-                PC: Floating on the left (Original)
-            */}
-            <div className="container relative z-30 px-6 mx-auto mt-[-30px] md:mt-0 pb-12 md:pb-0">
+            {/* --- 2. PC ONLY IMAGE (Your Original Floating Version) --- */}
+            <div className="hidden md:block absolute top-0 right-0 w-1/2 h-full z-0 pointer-events-none select-none">
+                <div className="relative w-full h-full">
+                    <div className="absolute inset-0 bg-gradient-to-l from-transparent via-[var(--background)] to-[var(--background)] z-10"></div>
+                    <Image
+                        src="/profile.jpg"
+                        alt="Profile PC"
+                        fill
+                        className="object-cover object-right-top"
+                        priority
+                    />
+                </div>
+            </div>
+
+            {/* --- 3. TEXT CONTENT (Stays exactly the same) --- */}
+            <div className="container relative z-30 px-6 mx-auto mt-[-20px] md:mt-0 pb-12 md:pb-0">
                 <div className="max-w-4xl text-left">
-                    {/* Badge */}
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -55,7 +54,6 @@ export default function Hero() {
                         </div>
                     </motion.div>
 
-                    {/* Main Heading */}
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -68,7 +66,6 @@ export default function Hero() {
                         </span>
                     </motion.h1>
 
-                    {/* Subtitle */}
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -78,17 +75,6 @@ export default function Hero() {
                         Computer Science Student | Programmer | AWS Enthusiast
                     </motion.p>
 
-                    {/* Quote */}
-                    <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 1, delay: 0.6 }}
-                        className="text-gray-500 mb-10 text-xs md:text-base max-w-md border-l-2 border-[var(--neon-purple)] pl-4 italic"
-                    >
-                        "Building strong programming fundamentals with a passion for systems and Linux"
-                    </motion.p>
-
-                    {/* Buttons */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
