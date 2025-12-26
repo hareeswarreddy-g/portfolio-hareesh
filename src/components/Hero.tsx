@@ -12,7 +12,7 @@ export default function Hero() {
             <div className="absolute inset-0 w-full h-full bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-gray-900 via-black to-black opacity-50 z-0"></div>
 
             {/* Profile Background Image (Right Side) */}
-            <div className="absolute top-0 right-0 w-full md:w-1/2 h-full z-0 opacity-40 md:opacity-100 pointer-events-none select-none">
+            <div className="absolute top-0 right-0 w-full md:w-1/2 h-full z-0 opacity-20 md:opacity-100 pointer-events-none select-none">
                 <div className="relative w-full h-full">
                     <div className="absolute inset-0 bg-gradient-to-l from-transparent via-[var(--background)] to-[var(--background)] z-10 md:via-transparent md:to-[var(--background)]"></div>
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--background)] z-10"></div>
@@ -55,7 +55,7 @@ export default function Hero() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.2 }}
-                        className="text-5xl md:text-7xl font-bold tracking-tight mb-4"
+                        className="text-3xl sm:text-4xl md:text-7xl font-bold tracking-tight mb-4"
                     >
                         <span className="text-white block">GUDDEMMAGAI</span>
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--neon-blue)] via-[var(--neon-cyan)] to-[var(--neon-purple)]">
@@ -67,7 +67,7 @@ export default function Hero() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.4 }}
-                        className="text-xl md:text-2xl text-gray-400 mb-8 max-w-xl"
+                        className="text-lg md:text-2xl text-gray-400 mb-8 max-w-xl"
                     >
                         Computer Science Student | Programmer | AWS Enthusiast
                     </motion.p>
