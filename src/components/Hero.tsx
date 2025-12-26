@@ -7,38 +7,42 @@ import { ArrowRight, Terminal } from "lucide-react";
 
 export default function Hero() {
     return (
-        <section className="relative min-h-screen flex flex-col md:flex-row items-center overflow-hidden bg-[var(--background)]">
-            
-            {/* 1. Background Glow & Gradients */}
+        <section className="relative min-h-screen flex flex-col md:block overflow-hidden bg-[var(--background)]">
+            {/* Background Elements */}
             <div className="absolute inset-0 w-full h-full bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-gray-900 via-black to-black opacity-50 z-0"></div>
 
-            {/* 2. PROFILE IMAGE 
-                MOBILE: Relative, takes up space at the top.
-                PC: Absolute, floats on the right side.
-            */}
-            <div className="relative md:absolute top-0 right-0 w-full md:w-1/2 h-[45vh] md:h-full z-10 pointer-events-none select-none">
+            {/* --- MOBILE ONLY IMAGE (Top of stack) --- */}
+            <div className="relative w-full h-[40vh] z-10 md:hidden">
                 <div className="relative w-full h-full">
-                    {/* Gradient for Mobile (Bottom Fade) */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--background)] z-20 md:hidden"></div>
-                    
-                    {/* Gradient for PC (Left Fade) */}
-                    <div className="absolute inset-0 bg-gradient-to-l from-transparent via-[var(--background)] to-[var(--background)] z-20 hidden md:block"></div>
-                    
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[var(--background)] z-20"></div>
                     <Image
                         src="/profile.jpg"
-                        alt="Profile"
+                        alt="Profile Mobile"
                         fill
-                        className="object-cover object-top md:object-right-top"
+                        className="object-cover object-top"
                         priority
                     />
                 </div>
             </div>
 
-            {/* 3. CONTENT 
-                We use 'container' to keep text aligned to the left on PC.
-                We use 'mt-[-50px]' on mobile to overlap the image slightly for a modern look.
-            */}
-            <div className="container relative z-30 px-6 mx-auto mt-[-50px] md:mt-0 pb-12 md:pb-0">
+            {/* --- PC ONLY IMAGE (Original Floating Style) --- */}
+            {/* Using 'md:block' and 'absolute' ensures it doesn't push the PC text */}
+            <div className="hidden md:block absolute top-0 right-0 w-1/2 h-full z-0 pointer-events-none select-none">
+                <div className="relative w-full h-full">
+                    <div className="absolute inset-0 bg-gradient-to-l from-transparent via-[var(--background)] to-[var(--background)] z-10"></div>
+                    <Image
+                        src="/profile.jpg"
+                        alt="Profile PC"
+                        fill
+                        className="object-cover object-right-top"
+                        priority
+                    />
+                </div>
+            </div>
+
+            {/* --- CONTENT CONTAINER --- */}
+            {/* On PC, 'md:flex md:items-center' restores your original vertical centering */}
+            <div className="container relative z-30 px-6 mx-auto flex flex-col md:flex md:flex-row md:items-center h-full min-h-[60vh] md:min-h-screen mt-[-20px] md:mt-0 pb-12 md:pb-0">
                 <div className="max-w-4xl text-left">
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}
