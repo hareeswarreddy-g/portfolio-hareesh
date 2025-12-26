@@ -1,9 +1,41 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Linkedin, Github, Send } from "lucide-react";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 export default function Contact() {
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [message, setMessage] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setLoading(true);
+
+        try {
+            await addDoc(collection(db, "contacts"), {
+                name,
+                email,
+                message,
+                createdAt: serverTimestamp(),
+            });
+
+            alert("Message sent successfully!");
+            setName("");
+            setEmail("");
+            setMessage("");
+        } catch (error) {
+            console.error(error);
+            alert("Failed to send message");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <section id="contact" className="py-24 relative overflow-hidden">
             {/* Background Glow */}
@@ -47,23 +79,50 @@ export default function Contact() {
                         </div>
 
                         {/* Form */}
-                        <form className="space-y-4">
+                        <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <label className="text-sm text-gray-400">Name</label>
-                                    <input type="text" className="w-full bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg p-3 text-white focus:outline-none focus:border-[var(--neon-blue)] transition-colors" placeholder="John Doe" />
+                                    <input
+                                        type="text"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        required
+                                        className="w-full bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg p-3 text-white focus:outline-none focus:border-[var(--neon-blue)] transition-colors"
+                                        placeholder="John Doe"
+                                    />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm text-gray-400">Email</label>
-                                    <input type="email" className="w-full bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg p-3 text-white focus:outline-none focus:border-[var(--neon-blue)] transition-colors" placeholder="john@example.com" />
+                                    <input
+                                        type="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                        className="w-full bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg p-3 text-white focus:outline-none focus:border-[var(--neon-blue)] transition-colors"
+                                        placeholder="john@example.com"
+                                    />
                                 </div>
                             </div>
+
                             <div className="space-y-2">
                                 <label className="text-sm text-gray-400">Message</label>
-                                <textarea rows={4} className="w-full bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg p-3 text-white focus:outline-none focus:border-[var(--neon-blue)] transition-colors" placeholder="Your message..."></textarea>
+                                <textarea
+                                    rows={4}
+                                    value={message}
+                                    onChange={(e) => setMessage(e.target.value)}
+                                    required
+                                    className="w-full bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg p-3 text-white focus:outline-none focus:border-[var(--neon-blue)] transition-colors"
+                                    placeholder="Your message..."
+                                />
                             </div>
-                            <button type="submit" className="w-full py-3 rounded-lg bg-gradient-to-r from-[var(--neon-blue)] to-[var(--neon-purple)] text-white font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
-                                Send Message <Send size={18} />
+
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="w-full py-3 rounded-lg bg-gradient-to-r from-[var(--neon-blue)] to-[var(--neon-purple)] text-white font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50"
+                            >
+                                {loading ? "Sending..." : <>Send Message <Send size={18} /></>}
                             </button>
                         </form>
                     </div>
