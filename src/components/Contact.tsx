@@ -4,8 +4,7 @@ import emailjs from "emailjs-com";
 import { motion } from "framer-motion";
 import { Send } from "lucide-react";
 
-// 1. Import your db from the file you just shared
-// Make sure the path './firebaseConfig' matches where your firebase file is saved
+// 1. Ensure this path points exactly to where your firebase config file lives
 import { db } from "../lib/firebase"; 
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
@@ -17,52 +16,63 @@ export default function Contact() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    // Prevent double clicks
+    if (loading) return;
     setLoading(true);
-
-    const templateParams = {
-      name,
-      email,
-      message,
-      createdAt: new Date().toLocaleString(),
-    };
 
     try {
       // --- STEP 1: SAVE TO FIREBASE ---
-      // This ensures you have a record even if the email fails
-      console.log("Saving to Firebase...");
-      await addDoc(collection(db, "contacts"), {
-        name,
-        email,
-        message,
+      console.log("Attempting to save to Firebase...");
+      const docRef = await addDoc(collection(db, "contacts"), {
+        name: name.trim(),
+        email: email.trim(),
+        message: message.trim(),
         sentAt: serverTimestamp(),
       });
+      console.log("Firebase Success! ID:", docRef.id);
 
       // --- STEP 2: SEND EMAIL VIA EMAILJS ---
-      console.log("Sending email...");
+      console.log("Attempting to send email...");
+      // We pass the data directly in the object
       await emailjs.send(
-        "service_43ztd5o",
-        "template_92fqc7t",
-        templateParams,
-        "mEoLFE2wYcpqLR-4J"
+        "service_43ztd5o", 
+        "template_92fqc7t", 
+        {
+          name: name,
+          email: email,
+          message: message,
+          createdAt: new Date().toLocaleString(),
+        },
+        "mEoLFE2wYcpqLR-4J" 
       );
+      console.log("EmailJS Success!");
 
-      alert("Success! Your message was saved and emailed. 🎉");
+      // --- STEP 3: SUCCESS FEEDBACK ---
+      alert("Message sent successfully! 🎉");
       
-      // Clear form
+      // Reset form fields
       setName("");
       setEmail("");
       setMessage("");
 
-    } catch (error) {
-      console.error("Error during submission:", error);
-      alert("Something went wrong. Check the console for details.");
+    } catch (error: any) {
+      // This will catch errors from BOTH Firebase and EmailJS
+      console.error("Submission Failure:", error);
+      
+      // Clearer error messages for you to debug
+      if (error.code === 'permission-denied') {
+        alert("Firebase Error: Please check your Firestore Security Rules.");
+      } else {
+        alert("Failed to send: " + (error.text || error.message || "Unknown Error"));
+      }
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <section id="contact" className="py-24 relative overflow-hidden">
+    <section id="contact" className="py-24 relative overflow-hidden bg-black">
       <div className="container mx-auto px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -71,11 +81,11 @@ export default function Contact() {
           transition={{ duration: 0.6 }}
           className="max-w-4xl mx-auto text-center"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Get In <span className="text-[var(--neon-purple)]">Touch</span>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
+            Get In <span className="text-purple-500">Touch</span>
           </h2>
           
-          <form onSubmit={handleSubmit} className="space-y-4 text-left">
+          <form onSubmit={handleSubmit} className="space-y-4 text-left mt-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <label className="text-sm text-gray-400">Name</label>
@@ -84,7 +94,7 @@ export default function Contact() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
-                  className="w-full bg-[var(--card-bg, #1a1a1a)] border border-[var(--card-border, #333)] rounded-lg p-3 text-white focus:outline-none focus:border-[var(--neon-blue, #00d2ff)]"
+                  className="w-full bg-[#1a1a1a] border border-[#333] rounded-lg p-3 text-white focus:outline-none focus:border-blue-500 transition-all"
                   placeholder="Your Name"
                 />
               </div>
@@ -95,7 +105,7 @@ export default function Contact() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full bg-[var(--card-bg, #1a1a1a)] border border-[var(--card-border, #333)] rounded-lg p-3 text-white focus:outline-none focus:border-[var(--neon-blue, #00d2ff)]"
+                  className="w-full bg-[#1a1a1a] border border-[#333] rounded-lg p-3 text-white focus:outline-none focus:border-blue-500 transition-all"
                   placeholder="your@email.com"
                 />
               </div>
@@ -108,7 +118,7 @@ export default function Contact() {
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 required
-                className="w-full bg-[var(--card-bg, #1a1a1a)] border border-[var(--card-border, #333)] rounded-lg p-3 text-white focus:outline-none focus:border-[var(--neon-blue, #00d2ff)]"
+                className="w-full bg-[#1a1a1a] border border-[#333] rounded-lg p-3 text-white focus:outline-none focus:border-blue-500 transition-all"
                 placeholder="How can I help you?"
               />
             </div>
@@ -116,9 +126,15 @@ export default function Contact() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50"
+              className="w-full py-3 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold flex items-center justify-center gap-2 hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? "Sending..." : <>Send Message <Send size={18} /></>}
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  Sending... <span className="animate-pulse">●●●</span>
+                </span>
+              ) : (
+                <>Send Message <Send size={18} /></>
+              )}
             </button>
           </form>
         </motion.div>
