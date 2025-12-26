@@ -1,8 +1,13 @@
 "use client";
 import { useState } from "react";
-import emailjs from "emailjs-com"; // Import EmailJS SDK
+import emailjs from "emailjs-com";
 import { motion } from "framer-motion";
-import { Mail, Linkedin, Github, Send } from "lucide-react";
+import { Send } from "lucide-react";
+
+// 1. Import your db from the file you just shared
+// Make sure the path './firebaseConfig' matches where your firebase file is saved
+import { db } from "../lib/firebase"; 
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 export default function Contact() {
   const [name, setName] = useState("");
@@ -14,30 +19,43 @@ export default function Contact() {
     e.preventDefault();
     setLoading(true);
 
-    // EmailJS parameters
     const templateParams = {
       name,
       email,
       message,
-      createdAt: new Date().toLocaleString(), // Add timestamp
+      createdAt: new Date().toLocaleString(),
     };
 
     try {
-      // Send the email via EmailJS
+      // --- STEP 1: SAVE TO FIREBASE ---
+      // This ensures you have a record even if the email fails
+      console.log("Saving to Firebase...");
+      await addDoc(collection(db, "contacts"), {
+        name,
+        email,
+        message,
+        sentAt: serverTimestamp(),
+      });
+
+      // --- STEP 2: SEND EMAIL VIA EMAILJS ---
+      console.log("Sending email...");
       await emailjs.send(
-        "service_43ztd5o", // Replace with your EmailJS service ID
-        "template_92fqc7t", // Replace with your EmailJS template ID
+        "service_43ztd5o",
+        "template_92fqc7t",
         templateParams,
-        "mEoLFE2wYcpqLR-4J" // Replace with your EmailJS API Key
+        "mEoLFE2wYcpqLR-4J"
       );
 
-      alert("Message sent successfully!");
+      alert("Success! Your message was saved and emailed. 🎉");
+      
+      // Clear form
       setName("");
       setEmail("");
       setMessage("");
+
     } catch (error) {
-      console.error(error);
-      alert("Failed to send message");
+      console.error("Error during submission:", error);
+      alert("Something went wrong. Check the console for details.");
     } finally {
       setLoading(false);
     }
@@ -56,12 +74,9 @@ export default function Contact() {
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             Get In <span className="text-[var(--neon-purple)]">Touch</span>
           </h2>
-          <p className="text-gray-400 mb-12">
-            Interested in collaborating or just want to say hi? Feel free to drop a message!
-          </p>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+          
+          <form onSubmit={handleSubmit} className="space-y-4 text-left">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <label className="text-sm text-gray-400">Name</label>
                 <input
@@ -69,8 +84,8 @@ export default function Contact() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
-                  className="w-full bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg p-3 text-white focus:outline-none focus:border-[var(--neon-blue)] transition-colors"
-                  placeholder="John Doe"
+                  className="w-full bg-[var(--card-bg, #1a1a1a)] border border-[var(--card-border, #333)] rounded-lg p-3 text-white focus:outline-none focus:border-[var(--neon-blue, #00d2ff)]"
+                  placeholder="Your Name"
                 />
               </div>
               <div className="space-y-2">
@@ -80,8 +95,8 @@ export default function Contact() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg p-3 text-white focus:outline-none focus:border-[var(--neon-blue)] transition-colors"
-                  placeholder="john@example.com"
+                  className="w-full bg-[var(--card-bg, #1a1a1a)] border border-[var(--card-border, #333)] rounded-lg p-3 text-white focus:outline-none focus:border-[var(--neon-blue, #00d2ff)]"
+                  placeholder="your@email.com"
                 />
               </div>
             </div>
@@ -93,15 +108,15 @@ export default function Contact() {
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 required
-                className="w-full bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg p-3 text-white focus:outline-none focus:border-[var(--neon-blue)] transition-colors"
-                placeholder="Your message..."
+                className="w-full bg-[var(--card-bg, #1a1a1a)] border border-[var(--card-border, #333)] rounded-lg p-3 text-white focus:outline-none focus:border-[var(--neon-blue, #00d2ff)]"
+                placeholder="How can I help you?"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-lg bg-gradient-to-r from-[var(--neon-blue)] to-[var(--neon-purple)] text-white font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50"
+              className="w-full py-3 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50"
             >
               {loading ? "Sending..." : <>Send Message <Send size={18} /></>}
             </button>
