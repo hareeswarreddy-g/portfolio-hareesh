@@ -33,7 +33,7 @@ export default function Hero() {
 
                         {/* Name */}
                         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-4 leading-tight">
-                            <span className="text-white block">GUDDEMMAGAI</span>
+                            <span className="text-white block">GUDDEMMAGARI</span>
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-500">
                                 HAREESWAR REDDY
                             </span>
