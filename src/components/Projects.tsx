@@ -6,36 +6,44 @@ import Link from "next/link";
 
 const projects = [
     {
-        title: "Student Management System",
-        description: "A comprehensive system to manage student records, attendance, and grades efficiently.",
-        tech: ["C", "C++", "File Handling"],
-        github: "#",
-        demo: "#",
+        title: "GameVersePro",
+        description: "A feature-rich game store application with a shopping cart system, checkout process with payment animations, and game ownership tracking. Includes inventory management and a polished modern UI.",
+        tech: ["Java", "OOP", "Spring Boot", "UI/UX"],
+        github: "https://github.com/hareeswarreddy-g/GameVersePro",
+        demo: "https://github.com/hareeswarreddy-g/GameVersePro",
         color: "from-blue-500 to-cyan-500"
     },
     {
-        title: "Console Application",
-        description: "Object-Oriented console app demonstrating polymorphism, inheritance, and encapsulation.",
-        tech: ["Java", "OOP", "Console UI"],
-        github: "#",
-        demo: "#",
+        title: "IntervuAI",
+        description: "An AI-powered mock interview platform that generates role-specific questions, evaluates answers in real time, and provides detailed feedback to help candidates ace their interviews.",
+        tech: ["Python", "AI/ML", "NLP", "React"],
+        github: "https://github.com/hareeswarreddy-g/IntervuAI",
+        demo: "https://github.com/hareeswarreddy-g/IntervuAI",
         color: "from-purple-500 to-pink-500"
     },
     {
-        title: "Linux Command Utility",
-        description: "Custom Bash utility scripts to automate system maintenance and file organization.",
-        tech: ["Bash", "Linux", "Shell Scripting"],
-        github: "#",
-        demo: "#",
+        title: "Jarvis Assistant Bot",
+        description: "A voice-activated personal assistant inspired by JARVIS. Handles tasks like web search, file management, weather updates, and system controls through natural language commands.",
+        tech: ["Python", "Speech Recognition", "NLP", "Automation"],
+        github: "https://github.com/hareeswarreddy-g/Jarvis-AssistantBot",
+        demo: "https://github.com/hareeswarreddy-g/Jarvis-AssistantBot",
         color: "from-green-500 to-emerald-500"
     },
     {
-        title: "Mini OS Project",
-        description: "A simulation of basic OS scheduling algorithms and memory management concepts.",
-        tech: ["C", "OS Concepts", "System Programming"],
-        github: "#",
-        demo: "#",
+        title: "Hest Assistant",
+        description: "A smart productivity assistant designed to streamline daily tasks, manage schedules, and provide intelligent suggestions. Built with a focus on user-friendly experience.",
+        tech: ["Python", "AI", "Task Automation", "CLI"],
+        github: "https://github.com/hareeswarreddy-g/Hest-Assistant",
+        demo: "https://github.com/hareeswarreddy-g/Hest-Assistant",
         color: "from-orange-500 to-red-500"
+    },
+    {
+        title: "BrainBuzzer – AI Quiz App",
+        description: "An AI-powered adaptive quiz platform that uses a Decision Tree algorithm to dynamically adjust question difficulty based on real-time performance. Features a Neobrutalist game-show UI.",
+        tech: ["Python", "Flask", "Decision Tree", "JavaScript"],
+        github: "https://github.com/hareeswarreddy-g/BrainBuzzer-A-quiz-app",
+        demo: "https://github.com/hareeswarreddy-g/BrainBuzzer-A-quiz-app",
+        color: "from-yellow-500 to-orange-500"
     }
 ];
 
@@ -53,12 +61,12 @@ export default function Projects() {
                         Featured <span className="text-[var(--neon-blue)]">Projects</span>
                     </h2>
 
-                    <div className="grid md:grid-cols-2 gap-8">
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {projects.map((project, idx) => (
                             <motion.div
                                 key={idx}
                                 whileHover={{ y: -10 }}
-                                className="group relative rounded-2xl overflow-hidden glass border border-[var(--card-border)] hover:border-[var(--neon-blue)]/50 transition-all duration-300"
+                                className={`group relative rounded-2xl overflow-hidden glass border border-[var(--card-border)] hover:border-[var(--neon-blue)]/50 transition-all duration-300 ${idx === projects.length - 1 && projects.length % 3 !== 0 ? "md:col-span-2 lg:col-span-1" : ""}`}
                             >
                                 {/* Hover Glow Background */}
                                 <div className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}></div>

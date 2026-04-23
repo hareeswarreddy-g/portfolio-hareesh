@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Send } from "lucide-react";
 
 // 1. Ensure this path points exactly to where your firebase config file lives
-import { db } from "../lib/firebase"; 
+import { db } from "../lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 export default function Contact() {
@@ -16,7 +16,7 @@ export default function Contact() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     // Prevent double clicks
     if (loading) return;
     setLoading(true);
@@ -36,35 +36,36 @@ export default function Contact() {
       console.log("Attempting to send email...");
       // We pass the data directly in the object
       await emailjs.send(
-        "service_43ztd5o", 
-        "template_92fqc7t", 
+        "service_43ztd5o",
+        "template_92fqc7t",
         {
           name: name,
           email: email,
           message: message,
           createdAt: new Date().toLocaleString(),
         },
-        "mEoLFE2wYcpqLR-4J" 
+        "mEoLFE2wYcpqLR-4J"
       );
       console.log("EmailJS Success!");
 
       // --- STEP 3: SUCCESS FEEDBACK ---
       alert("Message sent successfully! 🎉");
-      
+
       // Reset form fields
       setName("");
       setEmail("");
       setMessage("");
 
-    } catch (error: any) {
+    } catch (error) {
+      const err = error as any;
       // This will catch errors from BOTH Firebase and EmailJS
-      console.error("Submission Failure:", error);
-      
+      console.error("Submission Failure:", err);
+
       // Clearer error messages for you to debug
-      if (error.code === 'permission-denied') {
+      if (err.code === 'permission-denied') {
         alert("Firebase Error: Please check your Firestore Security Rules.");
       } else {
-        alert("Failed to send: " + (error.text || error.message || "Unknown Error"));
+        alert("Failed to send: " + (err.text || err.message || "Unknown Error"));
       }
     } finally {
       setLoading(false);
@@ -84,7 +85,7 @@ export default function Contact() {
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
             Get In <span className="text-purple-500">Touch</span>
           </h2>
-          
+
           <form onSubmit={handleSubmit} className="space-y-4 text-left mt-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">

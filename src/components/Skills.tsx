@@ -59,7 +59,7 @@ export default function Skills() {
                     </h2>
 
                     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {skillGroups.map((group, idx) => (
+                        {skillGroups.map((group) => (
                             <div
                                 key={group.category}
                                 className="p-6 rounded-2xl border border-white/10 bg-white/5"
